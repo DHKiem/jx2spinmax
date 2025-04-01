@@ -1,4 +1,11 @@
 # jx2spinmax
+
+Install:
+```
+julia> ]
+pkg> add https://github.com/DHKiem/jx2spinmax.git
+```
+
 Usage: 
 ```
 julia> import jx2spinmax
