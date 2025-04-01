@@ -126,9 +126,9 @@ function create(atom1list, atom2list, root_dir; toml=Nothing)
     #exchanges = SpinMax.jx_exchange_col(root_dir, cal_name,vec([[a1, a2] for a1 in atom1list , a2 in atom2list ]))
         
         
-    println("================ spinmax.jl Creating =============")
+    println("================ spinmax_param.jl Creating =============")
         
-    F = open("spinmax.jl","w")
+    F = open("spinmax_param.jl","w")
     write(F,"import SpinMax\n\n")
     write(F,"NumAtom = ")
     #write(F,string(NumAtom)*"\n\n")
@@ -176,7 +176,7 @@ function create(atom1list, atom2list, root_dir; toml=Nothing)
     close(F)
         
     if !(Nothing == toml)
-    println("================ spinmax.jl created =============")
+    println("================ spinmax_param.jl created =============")
     #SpinMax.band(lattice_vec, NumAtom_cal, AtomPosSpins2, exchanges, kpaths)
     else
         println("SKIP SpinMax band calculation due to No declaration of k-path.")
@@ -188,7 +188,7 @@ function create(atom1list, atom2list, root_dir; toml=Nothing)
         println("kPath_list = [")
         println("  [ [0.0,   0.0,   0.0], [0.5,   0.0,   0.0], [\"G\", \"X\"] ], ")
         println("]\"")
-        println("or Add band path in spinmax.jl \ne.g.")
+        println("or Add band path in spinmax_param.jl \ne.g.")
         println("kpaths = [
         20    0.0 0.0 0.0   0.5 0.0 0.0")
         println("]")
