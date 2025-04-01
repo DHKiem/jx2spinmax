@@ -1,0 +1,16 @@
+name = "jx2spinmax"
+uuid = "451688ca-d0d9-4bc9-8e78-fad4090f100d"
+authors = ["DoHoon Kiem kiem.dohoon@gmail.com"]
+version = "0.1.0"
+
+[deps]
+ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
+FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+Glob = "c27321d9-0574-5035-807b-f59d2c89b15c"
+TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+
+[compat]
+ArgParse = "1.2.0"
+FileIO = "1.17.0"
+Glob = "1.3.1"
+TOML = "1.0.3"
