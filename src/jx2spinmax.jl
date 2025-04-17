@@ -47,8 +47,10 @@ function create(atom1list, atom2list, root_dir; toml=Nothing)
     for atom1_name in atom1list
         for atom2_name in atom2list
             atom_12name = string(atom1_name) * "_" * string(atom2_name)
-            file_list_tmp = Glob.glob(joinpath(root_dir,"*_" * atom_12name * "_*" * orbital_name * "*.jld2") )
-            file_list_csv_tmp = Glob.glob(joinpath(root_dir,"*_" * atom_12name * "_*" * orbital_name * "*.csv") )
+            #file_list_tmp = Glob.glob(joinpath(root_dir,"*_" * atom_12name * "_*" * orbital_name * "*.jld2") )
+            #file_list_csv_tmp = Glob.glob(joinpath(root_dir,"*_" * atom_12name * "_*" * orbital_name * "*.csv") )
+            file_list_tmp = Glob.glob("*_" * atom_12name * "_*" * orbital_name * "*.jld2", root_dir )
+            file_list_csv_tmp = Glob.glob("*_" * atom_12name * "_*" * orbital_name * "*.csv", root_dir )
   
             append!(file_list,file_list_tmp)
             append!(file_list_csv,file_list_csv_tmp)
@@ -57,7 +59,7 @@ function create(atom1list, atom2list, root_dir; toml=Nothing)
     sort!(file_list)
     sort!(file_list_csv)
 
-    cached_mat_dict = Dict{Tuple{Int64,Int64},Any}();
+    #cached_mat_dict = Dict{Tuple{Int64,Int64},Any}();
     
     #global rv = zeros(Float64, 3,3)
     #global tv = zeros(Float64, 3,3)
