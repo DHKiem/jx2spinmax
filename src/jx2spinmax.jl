@@ -1,7 +1,7 @@
 ###############################################################################
 # Do Hoon Kiem gatto@kaist.ac.kr
 # 2024.05
-# Last update: 2025.03
+# Last update: 2025.05
 # https://kaist-elst.github.io/DFTforge.jl/
 # https://dhkiem.github.io/SpinMax.jl
 # SpinMax.jx2spinmax(atom1, atom2, root_dir; toml = tomlfile)
@@ -10,13 +10,13 @@
 
 module jx2spinmax
 
-export create
+export create_col
 
 
 const readme1 = "jx2spinmax: https://github.com/DHKiem/jx2spinmax"
 const readme2 = "SpinMax: https://github.com/KAIST-ELST/SpinMax_dev.jl"
 const readme3 = "DFTforge: https://github.com/KAIST-ELST/DFTforge.jl.git"
-const readme4 = "USE: jx2spinmax.create(atom1, atom2, jxdir; toml=TOMLFILE)\n e.g. jx2spinmax.create([1,2], [1,2], \"jx2.col.spin_0.0\"; toml=\"MFT.toml\")"
+const readme4 = "USE: jx2spinmax.create_col(atom1, atom2, jxdir; spinupdn=SIGN_for_Each_Spin, toml=TOMLFILE)\n e.g. jx2spinmax.create_col([1,2], [1,2], \"jx2.col.spin_0.0\"; spinupdn=[1,-1], toml=\"MFT.toml\")"
 
 
 function __init__()
@@ -33,7 +33,7 @@ using ArgParse
 #import SpinMax
 import TOML
   
-function create(atom1list, atom2list, root_dir; toml=Nothing)
+function create_col(atom1list, atom2list, root_dir; spinupdn=Nothing, toml=Nothing)
     println("================ User input =============")
     println(atom1list)
     println(atom2list)
@@ -105,6 +105,14 @@ function create(atom1list, atom2list, root_dir; toml=Nothing)
     println("kpaths\n", kpaths, "\n", typeof(kpaths))
     end
     ############################
+
+    #################### spin sign up down #########
+    if !(Nothing == spinupdn)
+        @assert(atom1list == atom2list, "spinupdn requires atom1list == atom2list")
+        @assert(length(atom2list) == length(spinupdn) , "spinupdn works as the order of the atoms list. It requires the same length and order. ")
+    end
+    #################### spin sign up down #########
+
     #global tv
     lattice_vec = [
         tv[1,1:3],
@@ -113,9 +121,19 @@ function create(atom1list, atom2list, root_dir; toml=Nothing)
     ]
     
     NumAtom = atomnum
+    #println(atomnum)
     AtomPosSpins = [
-        [vec(transpose(global_xyz[i,1:3])/tv), [1], [0,0]] for i in 1:atomnum ### need to find up and down spins 
+        [vec(transpose(global_xyz[i,1:3])/tv), [1], [0,0]] for i in 1:atomnum 
     ]
+
+    if !(Nothing == spinupdn)
+        for (a1i,a1) in enumerate(atom1list)
+ 
+            AtomPosSpins[a1][3] = [90*(1-spinupdn[a1i]),0]
+        end
+    end
+    
+
     println("lattice_vec\n",lattice_vec)
     println("NumAtom\n", NumAtom)
     println("AtomPosSpins\n", AtomPosSpins)
@@ -150,12 +168,22 @@ function create(atom1list, atom2list, root_dir; toml=Nothing)
     write(F,"#[atom1, atom2], [a1,a2,a3], [J1,J2,J3,J4,J5,J6,J7,J8,J9]\n")
     write(F,"exchanges = SpinMax.jx_exchange_col(\""*root_dir*"/\",\""*cal_name*"\",[\n")
     write(F," "^13)
+    if !(Nothing == spinupdn)
+        for (a1i,a1) in enumerate(atom1list)
+            for (a2i,a2) in enumerate(atom2list)
+                fmsign = sign(spinupdn[a1i] *spinupdn[a2i])
+                atom_12name = "["*string(a1) * "," * string(a2)*"," * string(fmsign) *"], "
+                write(F, atom_12name)
+            end
+        end        
+    else   
     for a1 in atom1list
         for a2 in atom2list
             atom_12name = "["*string(a1) * "," * string(a2)*"], "
             write(F, atom_12name)
         end
     end
+    end#else if
     write(F, "\n"*" "^13*"])\n")
         
         #for v_file_csv in file_list_csv

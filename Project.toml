@@ -1,7 +1,7 @@
 name = "jx2spinmax"
 uuid = "451688ca-d0d9-4bc9-8e78-fad4090f100d"
 authors = ["DoHoon Kiem kiem.dohoon@gmail.com"]
-version = "1.0.1"
+version = "1.1.0"
 
 [deps]
 ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
